@@ -1,0 +1,23 @@
+[Unit]
+Description=Install Nix Package Manager (First Boot)
+Documentation=https://github.com/DeterminateSystems/nix-installer
+After=network-online.target
+Wants=network-online.target
+# Skip if Nix is already installed (idempotent guard)
+ConditionPathExists=!/nix/var/nix/profiles/default
+
+[Service]
+Type=oneshot
+# The installer auto-detects ostree/bootc and:
+#   1. creates /var/lib/nix
+#   2. writes and activates /etc/systemd/system/nix.mount (bind: /var/lib/nix -> /nix)
+#   3. installs Nix into the now-writable /nix
+#   4. enables nix-daemon.socket
+ExecStart=/usr/libexec/nix-installer install --no-confirm
+RemainAfterExit=yes
+TimeoutStartSec=0
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

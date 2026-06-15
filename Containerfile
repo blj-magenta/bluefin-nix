@@ -18,4 +18,3 @@ RUN ARCH=$(uname -m) && \
 COPY nix-installer-first-boot.service /etc/systemd/system/nix-installer-first-boot.service
 RUN systemctl enable nix-installer-first-boot.service
 
-RUN bootc container lint

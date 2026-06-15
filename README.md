@@ -33,12 +33,23 @@ The first-boot service is idempotent: it is skipped if Nix is already installed
 podman build -t bluefin-nix .
 ```
 
+## Prerequisites
+
+This image is built on top of [Bluefin-DX](https://projectbluefin.io/) and is intended to be rebased onto an existing [Universal Blue](https://universal-blue.org/) installation (Bluefin, Aurora, or any other variant). It will not work correctly on a generic Fedora or non-bootc system.
+
 ## Usage
 
-Rebase an existing bootc system onto the built image (after pushing it to a registry):
+**From the hosted registry:**
 
 ```sh
-sudo bootc switch <registry>/bluefin-nix:latest
+sudo bootc switch ghcr.io/blj-magenta/bluefin-nix:latest
+```
+
+**From a local build** — build with `sudo` so the image lands in root's container storage where `bootc` can reach it:
+
+```sh
+sudo podman build -t localhost/bluefin-nix .
+sudo bootc switch --transport containers-storage localhost/bluefin-nix:latest
 ```
 
 After the reboot, the first-boot service installs Nix automatically. Once it completes,
